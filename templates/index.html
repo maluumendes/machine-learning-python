@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Previsão de Desempenho de Estudantes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8 text-center">
+                <h1 class="display-5 fw-bold text-primary">Sistema de Previsão de Aprovação Escolar</h1>
+                <p class="lead text-muted mt-3">
+                    Projeto desenvolvido com Flask, Pandas e Machine Learning baseado no dataset UCI Student Performance.
+                </p>
+                <hr class="my-4">
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                  {% if messages %}
+                    {% for category, message in messages %}
+                      <div class="alert alert-{{ category }}" role="alert">{{ message }}</div>
+                    {% endfor %}
+                  {% endif %}
+                {% endwith %}
+
+                <div class="card shadow-sm p-4 text-start mb-4">
+                    <h3 class="h4 mb-3">1. Envie sua base de dados (CSV)</h3>
+                    <form action="/upload" method="POST" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <input class="form-control" type="file" id="arquivo_csv" name="arquivo_csv" accept=".csv" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Carregar e Analisar Dados</button>
+                    </form>
+                    <div class="text-center mt-3">
+                        <a href="/analise-padrao" class="text-decoration-none">Ou use o dataset padrão integrado</a>
+                    </div>
+                </div>
+
+                <div class="card shadow-sm p-4 text-start">
+                    <h3 class="h4 mb-3">2. Ir direto para o formulário de previsão</h3>
+                    <p class="text-muted">Deseja testar as previsões do modelo treinado com novos valores?</p>
+                    <a href="/previsao" class="btn btn-success w-100">Acessar Formulário de Previsão</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
