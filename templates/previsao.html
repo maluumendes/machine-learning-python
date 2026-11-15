@@ -50,13 +50,9 @@
                     </form>
 
                     {% if resultado %}
-                        <div class="alert mt-4 {% if resultado.predicao_int == 1 %}alert-success{% else %}alert-danger{% endif %}" role="alert">
-                            <h4 class="alert-heading">Resultado da Previsão:</h4>
-                            <p class="mb-0 fs-5"><strong>{{ resultado.resultado_texto }}</strong></p>
-                            {% if resultado.confianca %}
-                                <hr>
-                                <p class="mb-0 small">Confiança estimada do modelo: {{ resultado.confianca }}%</p>
-                            {% endif %}
+                        <div class="mt-4 {% if resultado.aprovado %}alerta-aprovado{% else %}alerta-reprovado{% endif %}" role="alert">
+                            <h4 class="h5">Resultado da Previsão:</h4>
+                            <p class="mb-0 fs-5"><strong>{{ resultado.texto }}</strong></p>
                         </div>
                     {% endif %}
                 </div>
