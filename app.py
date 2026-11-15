@@ -1,3 +1,4 @@
+
 from pathlib import Path
 from datetime import datetime
 
@@ -135,16 +136,6 @@ def exibir_analise(df_original, nome_arquivo, separador):
     gerar_graficos(df_tratado)
     analises = gerar_analises(df_tratado)
 
-    tabelas_analise = {
-        "Aprovação por tempo de estudo (studytime)": analises["por_tempo_estudo"],
-        "Aprovação por reprovações anteriores (failures)": analises["por_reprovacoes"],
-        "Aprovação por apoio escolar (schoolsup)": analises["por_apoio"],
-    }
-    tabelas_html = {
-        titulo: tabela.to_html(classes="table table-sm table-bordered", index=False)
-        for titulo, tabela in tabelas_analise.items()
-    }
-
     return render_template(
         "analise.html",
         nome_arquivo=nome_arquivo,
@@ -155,23 +146,12 @@ def exibir_analise(df_original, nome_arquivo, separador):
         removidos=len(df_original) - len(df_tratado),
         taxa=round(df_tratado["aprovado"].mean() * 100, 2),
         tabela=df_tratado.head(10).to_html(classes="table table-striped table-bordered", index=False),
-        tabelas_analise=tabelas_html,
+        tabela_estudo=analises["por_tempo_estudo"].to_html(classes="table table-sm", index=False),
+        tabela_reprovacoes=analises["por_reprovacoes"].to_html(classes="table table-sm", index=False),
+        tabela_apoio=analises["por_apoio"].to_html(classes="table table-sm", index=False),
         # Muda a cada análise para o navegador não mostrar gráficos antigos (cache)
         versao_graficos=datetime.now().strftime("%Y%m%d%H%M%S"),
     )
-
-
-#INFORMACOES DO MODELO ----------------------------------------------------------
-def obter_info_modelo():
-    modelo = carregar_modelo()
-    nome_tecnico = type(modelo).__name__
-    data_treino = datetime.fromtimestamp(CAMINHO_MODELO.stat().st_mtime)
-    return {
-        "nome": MODELOS.get(nome_tecnico, nome_tecnico),
-        "base": BASE_TREINO,
-        "data": data_treino.strftime("%d/%m/%Y %H:%M"),
-        "variaveis": "studytime, failures, schoolsup",
-    }
 
 
 #ROTAS  ------------------------------------------------------------
@@ -225,12 +205,6 @@ def previsao():
     resultado = None
     erro = None
 
-    try:
-        info_modelo = obter_info_modelo()
-    except FileNotFoundError:
-        return render_template("previsao.html", resultado=None, info_modelo=None,
-                               erro="Modelo não encontrado. Execute python treinar.py antes de usar a previsão.")
-
     if request.method == "POST":
         studytime = request.form.get("studytime", "").strip()
         failures = request.form.get("failures", "").strip()
@@ -244,10 +218,10 @@ def previsao():
         elif schoolsup not in VALORES_ACEITOS["schoolsup"]:
             erro = "Apoio escolar inválido. Escolha Sim ou Não."
         else:
-            resultado = fazer_previsao(studytime, failures, schoolsup)
+            resultado = fazer_previsao(MODELO, studytime, failures, schoolsup)
 
     return render_template("previsao.html", resultado=resultado,
-                           erro=erro, info_modelo=info_modelo)
+                           erro=erro, treino=TREINO)
 
 
 @app.errorhandler(413)
