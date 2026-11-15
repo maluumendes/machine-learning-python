@@ -22,7 +22,9 @@ def fazer_previsao(modelo, studytime, failures, schoolsup):
 
     resultado = modelo.predict(X_novo)
 
+    confianca = round(modelo.predict_proba(X_novo)[0].max() * 100, 2)
+
     if resultado[0] == 1:
-        return {"aprovado": True, "texto": "Aprovado (nota final G3 ≥ 10)"}
+        return {"aprovado": True, "texto": "Aprovado (nota final G3 ≥ 10)", "confianca": confianca}
     else:
-        return {"aprovado": False, "texto": "Reprovado (nota final G3 < 10)"}
+        return {"aprovado": False, "texto": "Reprovado (nota final G3 < 10)", "confianca": confianca}
