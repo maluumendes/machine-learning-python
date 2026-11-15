@@ -1,8 +1,124 @@
+/* Paleta rosa (tons harmônicos, do mais claro ao mais escuro) */
+:root {
+    --rosa-fundo: #FFF5F8;
+    --rosa-claro: #FDE2EA;
+    --rosa-suave: #F8C8DC;
+    --rosa-medio: #F4A6C1;
+    --rosa-forte: #E07A9F;
+    --rosa-escuro: #B5527A;
+    --rosa-texto: #6D3B55;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f8f9fa;
+    background-color: var(--rosa-fundo);
+    color: var(--rosa-texto);
 }
+
+h1, h2, h3, h4, h5, h6, .titulo-rosa {
+    color: var(--rosa-escuro);
+}
+
+.texto-suave {
+    color: #8C6478;
+}
+
+/* Cartões */
 .card {
-    border: none;
-    border-radius: 10px;
+    border: 1px solid var(--rosa-claro);
+    border-radius: 16px;
+    background-color: #FFFFFF;
+    box-shadow: 0 4px 12px rgba(181, 82, 122, 0.08);
+}
+
+hr {
+    border-color: var(--rosa-suave);
+    opacity: 1;
+}
+
+/* Botões */
+.btn-rosa {
+    background-color: var(--rosa-forte);
+    border: 1px solid var(--rosa-forte);
+    color: #FFFFFF;
+    border-radius: 999px;
+}
+
+.btn-rosa:hover {
+    background-color: var(--rosa-escuro);
+    border-color: var(--rosa-escuro);
+    color: #FFFFFF;
+}
+
+.btn-rosa-contorno {
+    background-color: #FFFFFF;
+    border: 1px solid var(--rosa-medio);
+    color: var(--rosa-escuro);
+    border-radius: 999px;
+}
+
+.btn-rosa-contorno:hover {
+    background-color: var(--rosa-claro);
+    color: var(--rosa-escuro);
+}
+
+/* Links */
+a {
+    color: var(--rosa-escuro);
+}
+
+a:hover {
+    color: var(--rosa-forte);
+}
+
+/* Campos do formulário */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--rosa-medio);
+    box-shadow: 0 0 0 0.2rem rgba(244, 166, 193, 0.4);
+}
+
+/* Mensagens */
+.alerta-erro {
+    background-color: #FCE4EC;
+    border: 1px solid var(--rosa-escuro);
+    color: var(--rosa-escuro);
+    border-radius: 12px;
+    padding: 12px 16px;
+}
+
+.alerta-info {
+    background-color: var(--rosa-fundo);
+    border: 1px dashed var(--rosa-medio);
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.9rem;
+}
+
+.alerta-aprovado {
+    background-color: var(--rosa-claro);
+    border: 2px solid var(--rosa-medio);
+    color: var(--rosa-texto);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+.alerta-reprovado {
+    background-color: #F5E1E8;
+    border: 2px solid var(--rosa-escuro);
+    color: var(--rosa-escuro);
+    border-radius: 12px;
+    padding: 16px;
+}
+
+/* Tabelas geradas pelo Pandas (to_html) */
+.table {
+    --bs-table-striped-bg: var(--rosa-fundo);
+    color: var(--rosa-texto);
+}
+
+.table thead th {
+    background-color: var(--rosa-suave);
+    color: var(--rosa-texto);
+    border-color: var(--rosa-medio);
 }
