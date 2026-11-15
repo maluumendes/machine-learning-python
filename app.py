@@ -9,8 +9,8 @@ import matplotlib.pyplot as plt
 from flask import Flask, render_template, request
 
 from dados import carregar_dados, tratar_dados, gerar_analises, COLUNAS_NECESSARIAS
-from modelo import fazer_previsao, carregar_modelo, CAMINHO_MODELO
-
+from modelo import fazer_previsao
+from treinar import treinar_modelos
 
 app = Flask(__name__)
 #limite de tamanho do arquivo enviado = 2 MB
@@ -29,13 +29,10 @@ VALORES_ACEITOS = {
     "schoolsup": ["yes", "no"],
 }
 
-#informacos sobre o modelo fixo usado na previsao
-BASE_TREINO = "student-mat.csv (UCI Student Performance - Matemática)"
-MODELOS = {
-    "DecisionTreeClassifier": "Árvore de Decisão (DecisionTreeClassifier)",
-    "RandomForestClassifier": "Random Forest (RandomForestClassifier)",
-}
 
+#TREINAMENTO -----------------------------------------------------------------------
+TREINO = treinar_modelos()
+MODELO = TREINO["modelo"]
 
 #LEITURA E VALIDACAO DO CSV ENVIADO -------------------------------------------------
 
@@ -111,7 +108,8 @@ def gerar_graficos(df):
 
     # Gráfico 3 - Relação: nota final (G3) por reprovações anteriores
     fig, ax = plt.subplots(figsize=(6, 4))
-    df.boxplot(column="G3", by="failures", ax=ax, grid=False)
+    df.boxplot(column="G3", by="failures", ax=ax, grid=False,
+               color={"boxes": "#B5527A", "whiskers": "#B5527A", "medians": "#F4A6C1", "caps": "#B5527A"})
     ax.axhline(10, color="#B5527A", linestyle="--", label="Nota mínima (10)")
     plt.suptitle("")  # remove o título automático do boxplot do Pandas
     plt.title("Nota Final (G3) por Reprovações Anteriores")
@@ -156,9 +154,7 @@ def exibir_analise(df_original, nome_arquivo, separador):
         total=len(df_tratado),
         removidos=len(df_original) - len(df_tratado),
         taxa=round(df_tratado["aprovado"].mean() * 100, 2),
-        tabela=df_tratado.head(10).to_html(
-            classes="table table-striped table-bordered", index=False
-        ),
+        tabela=df_tratado.head(10).to_html(classes="table table-striped table-bordered", index=False),
         tabelas_analise=tabelas_html,
         # Muda a cada análise para o navegador não mostrar gráficos antigos (cache)
         versao_graficos=datetime.now().strftime("%Y%m%d%H%M%S"),
