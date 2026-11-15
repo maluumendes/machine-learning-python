@@ -122,3 +122,12 @@ a:hover {
     color: var(--rosa-texto);
     border-color: var(--rosa-medio);
 }
+
+/* Troca as cores do Bootstrap que ainda estejam nos HTML por rosa */
+.text-primary {
+    color: var(--rosa-escuro) !important;
+}
+
+.text-muted {
+    color: #8C6478 !important;
+}
